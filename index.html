@@ -8,16 +8,14 @@
 </head>
 <body>
   <nav id="navbar">
-    <header class="main-header">JS Regular Expresion</header>
+    <header class="main-header">JS Regular Expressions</header>
     <ul class="method-list">
-      <li><a class="nav-link" href="#exec">exec()</a></li>
-      <li><a class="nav-link" href="#test">test()</a></li>
-      <li><a class="nav-link" href="#match">match()</a></li>
-      <li><a class="nav-link" href="#matchall">matchAll()</a></li>
-      <li><a class="nav-link" href="#search">search()</a></li>
-      <li><a class="nav-link" href="#replace">replace()</a></li>
-      <li><a class="nav-link" href="#replaceall">replaceAll()</a></li>
-      <li><a class="nav-link" href="#split">split()</a></li>
+      <li><a class="nav-link" href="#exec">RegExp.prototype.exec()</a></li>
+      <li><a class="nav-link" href="#test">RegExp.prototype.test()</a></li>
+      <li><a class="nav-link" href="#match">String.prototype.match()</a></li>
+      <li><a class="nav-link" href="#replace">String.prototype.replace()</a></li>
+      <li><a class="nav-link" href="#search">String.prototype.search()</a></li>
+      <li><a class="nav-link" href="#split">String.prototype.split()</a></li>
     </ul>
   </nav>
   <div id="main-doc">
@@ -26,7 +24,135 @@
       <p>Regular expressions are used with the RegExp methods test() and exec() and with the String methods match(),
         replace(), search(), and split(). These methods are explained in detail in the <a
           href="hhttps://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference">Javascript reference</a>.</p>
-      
+      <p>When you want to know whether a pattern is found in a string, use the test() or search() methods; for more
+        information (but slower execution) use the exec() or match() methods. If you use exec() or match() and if the
+        match succeeds, these methods return an array and update properties of the associated regular expression object
+        and also of the predefined regular expression object, RegExp. If the match fails, the exec() method returns null
+        (which coerces to false).</p>
+    </section>
+    <section class="main-section">
+      <header id="exec">exec()</header>
+      <p>The <code class="inline-code">exec()</code>method executes a search for a match in a specified string. Returns a
+        result array, or null.</p>
+      <p>The <code class="inline-code">exec()</code>can be used to iterate over multiple matches in a string of text (with
+        capture groups), as opposed to getting just the matching strings with String.prototype.match().</p>
+      <pre class="snippet-code">const regex1 = RegExp('foo*', 'g');
+      const str1 = 'table football, foosball';
+      let array1;
+  
+      while ((array1 = regex1.exec(str1)) !== null) {
+        console.log(`Found ${array1[0]}. Next starts at ${regex1.lastIndex}.`);
+        // expected output: "Found foo. Next starts at 9."
+        // expected output: "Found foo. Next starts at 19."
+      }
+            </pre>
+    </section>
+    <section class="main-section">
+      <header id="test">test()</header>
+      <p>The <code class="inline-code">test()</code> method executes a search for a match between a regular expression and
+        a specified string. Returns true or false.</p>
+      <pre class="snippet-code">
+  const str = 'table football';
+  
+  const regex = RegExp('foo*');
+  const globalRegex = RegExp('foo*', 'g');
+  
+  console.log(regex.test(str));
+  // expected output: true
+  
+  console.log(regex.test(str));
+  // expected output: true
+  
+  console.log(globalRegex.lastIndex);
+  // expected output: 0
+  
+  console.log(globalRegex.test(str));
+  // expected output: true
+  
+  console.log(globalRegex.lastIndex);
+  // expected output: 9
+  
+  console.log(globalRegex.test(str));
+  // expected output: false
+              </pre>
+  
+    </section>
+    <section class="main-section">
+      <header id="match">match()</header>
+      <p>The <code class="inline-code">match()</code> method retrieves the result of matching a string against a regular
+        expression.</p>
+      <pre class="snippet-code">
+  const paragraph = 'The quick brown fox jumps over the lazy dog. It barked.';
+  const regex = /[A-Z]/g;
+  const found = paragraph.match(regex);
+  
+  console.log(found);
+  // expected output: Array ["T", "I"]
+  
+              </pre>
+  
+    </section>
+    </section>
+    <section class="main-section">
+      <header id="replace">replace()</header>
+      <p>The <code class="inline-code">replace()</code> method returns a new string with some or all matches of a pattern
+        replaced by a replacement. The pattern can be a string or a RegExp, and the replacement can be a string or a
+        function to be called for each match. If pattern is a string, only the first occurrence will be replaced.</p>
+      <pre class="snippet-code">
+  const p = 'The quick brown fox jumps over the lazy dog. 
+             If the dog reacted, was it really lazy?';
+  const regex = /dog/gi;
+  
+  console.log(p.replace(regex, 'ferret'));
+  // expected output: "The quick brown fox jumps over the lazy ferret. 
+                       If the ferret reacted, was it really lazy?"
+  console.log(p.replace('dog', 'monkey'));
+  // expected output: "The quick brown fox jumps over the lazy monkey.
+                       If the dog reacted, was it really lazy?"
+              </pre>
+  
+    </section>
+    <section class="main-section">
+      <header id="search">search()</header>
+      <p>The <code class="inline-code">search()</code>method executes a search for a match between a regular expression
+        and this String object.</p>
+      <pre class="snippet-code">
+  const paragraph = 'The quick brown fox jumps over the lazy dog. 
+                     If the dog barked, was it really lazy?';
+  // any character that is not a word character or whitespace
+  const regex = /[^\w\s]/g;
+  
+  console.log(paragraph.search(regex));
+  // expected output: 43
+  
+  console.log(paragraph[paragraph.search(regex)]);
+  // expected output: "."
+              </pre>
+  
+    </section>
+    </section>
+    <section class="main-section">
+      <header id="split">split()</header>
+      <p>The <code class="inline-code">split()</code>method divides a String into an ordered set of substrings, puts these
+        substrings into an array, and returns the array. The division is done by searching for a pattern; where the
+        pattern is provided as the first parameter in the method's call. </p>
+      <pre class="snippet-code">
+  const str = 'The quick brown fox jumps over the lazy dog.';
+  
+  const words = str.split(' ');
+  console.log(words[3]);
+  // expected output: "fox"
+  
+  const chars = str.split('');
+  console.log(chars[8]);
+  // expected output: "k"
+  
+  const strCopy = str.split();
+  console.log(strCopy);
+  // expected output: Array ["The quick brown fox jumps over the lazy dog."]
+              </pre>
+  
+    </section>
   </div>
 </body>
 </html>
